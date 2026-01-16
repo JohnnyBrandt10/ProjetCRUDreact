@@ -4,6 +4,7 @@ import express from 'express';
 import cookieParser from 'cookie-parser';
 import './config/Db.js';
 import userRoutes from './routes/user.routes.js';
+import postRoutes from './routes/post.routes.js';
 import { checkUser, requireAuth } from './middleware/auth.middleware.js';
 
 const app = express();
@@ -21,6 +22,7 @@ app.get('/jwtid', requireAuth, (req, res) => {
 
 // Routes
 app.use('/api/user', userRoutes);
+app.use('/api/post', postRoutes);
 
 // Server
 const PORT = process.env.PORT || 3000;

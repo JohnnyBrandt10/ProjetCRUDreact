@@ -36,5 +36,11 @@ export const signInErrors = (err) => {
     errors.password = "Mot de passe incorrect";
   }
 
+  if (err.message === "missing fields") {
+    errors.email = "Email requis";
+    errors.password = "Mot de passe requis";
+  }
+
   return errors;
 };
+
