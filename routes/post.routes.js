@@ -10,6 +10,8 @@ import {
   unlikePost,
   updatePost
 } from '../controllers/post.controller.js';
+import upload from '../middleware/upload.middleware.js';
+import { uploadProfil } from '../controllers/upload.controller.js';
 const router = Router();
 
 //routes posts
@@ -24,5 +26,8 @@ router.patch('/unlike-post/:id', unlikePost);
 router.patch('/comment-post/:id', commentPost);
 router.patch('/edit-comment-post/:id', editcommentPost);
 router.patch('/delete-comment-post/:id', deletecommentPost);
+
+//upload
+router.post('/upload', upload.single('file'), uploadProfil);
 
 export default router;

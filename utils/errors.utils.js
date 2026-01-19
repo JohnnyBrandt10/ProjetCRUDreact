@@ -44,3 +44,17 @@ export const signInErrors = (err) => {
   return errors;
 };
 
+//upload errors
+export const uploadErrors = (err) => {
+  let errors = {format: "", maxSize: ""}
+
+  if (err.message.includes('invalid file')) {
+    errors.format = 'Format non prise'
+  }
+
+  if (err.message.includes('max size')) {
+    errors.maxSize = 'le fichier depasse 500Ko'
+  }
+
+  return errors
+}
