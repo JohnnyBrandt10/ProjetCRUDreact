@@ -1,6 +1,7 @@
 import mongoose from 'mongoose';
 import PostModel from '../models/post.model.js';
 import UserModel from '../models/user.model.js';
+import { uploadErrors } from '../utils/errors.utils.js';
 const ObjectID = mongoose.Types.ObjectId;
 
 //affichage de tout les posts
@@ -20,27 +21,55 @@ export const getPosts = async (req, res) => {
 export const createPost = async (req, res) => {
   const { posterID, message, video } = req.body;
 
+  // Champs obligatoires
   if (!posterID || !message) {
     return res.status(400).json({
-      message: 'PosterID et message sont obligatoires'
+      message: "posterID et message sont obligatoires"
     });
   }
 
+  let picture = "";
+
+  // Image optionnelle
+  if (req.file) {
+    // vérifications
+    if (
+      req.file.mimetype !== "image/jpg" &&
+      req.file.mimetype !== "image/png" &&
+      req.file.mimetype !== "image/jpeg"
+    ) {
+      return res.status(400).json({
+        message: "Format image non autorisé"
+      });
+    }
+
+    if (req.file.size > 500000) {
+      return res.status(400).json({
+        message: "Image trop volumineuse (max 500Ko)"
+      });
+    }
+
+    picture = `/uploads/posts/${req.file.filename}`;
+  }
+
+  // Création du post
   try {
     const newPost = new PostModel({
       posterID,
       message,
-      video,
+      picture,        // "" ou chemin image
+      video: video || "",
       likes: [],
       comments: []
     });
 
     const post = await newPost.save();
-    res.status(201).json(post);
+    return res.status(201).json(post);
+
   } catch (err) {
-    console.error('Erreur création post :', err);
-    res.status(500).json({
-      message: 'Erreur serveur lors de la création du post',
+    console.error("Erreur création post :", err);
+    return res.status(500).json({
+      message: "Erreur serveur",
       error: err.message
     });
   }

@@ -3,16 +3,16 @@ import path from "path";
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, "uploads/profil");
+    cb(null, "uploads/posts");
   },
   filename: (req, file, cb) => {
     cb(
       null,
       Date.now() + path.extname(file.originalname)
     );
-  },
+  }
 });
 
-const upload = multer({ storage });
+const uploadPost = multer({ storage });
 
-export default upload;
+export default uploadPost;

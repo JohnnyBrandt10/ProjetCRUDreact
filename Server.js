@@ -1,6 +1,7 @@
 import dotenv from 'dotenv';
 dotenv.config({ path: './config/.env' });
 import express from 'express';
+import cors from 'cors'
 import cookieParser from 'cookie-parser';
 import './config/Db.js';
 import userRoutes from './routes/user.routes.js';
@@ -8,6 +9,15 @@ import postRoutes from './routes/post.routes.js';
 import { checkUser, requireAuth } from './middleware/auth.middleware.js';
 
 const app = express();
+
+app.use(
+  cors({
+    origin: process.env.CLIENT_URL,
+    credentials: true,
+    methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
+    allowedHeaders: ["Content-Type", "Authorization"]
+  })
+);
 
 // Body parser
 app.use(express.json());

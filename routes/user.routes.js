@@ -1,4 +1,6 @@
 import { Router } from 'express';
+import upload from '../middleware/upload.middleware.js';
+import { uploadProfil } from '../controllers/upload.controller.js';
 import { logout, signin, signup } from '../controllers/auth.controller.js';
 import {
   deleteUser,
@@ -23,5 +25,8 @@ router.put('/:id', updateUser);
 router.delete('/:id', deleteUser);
 router.patch('/follow/:id', follow);
 router.patch('/unfollow/:id', unfollow);
+
+//upload
+router.post('/upload', upload.single('file'), uploadProfil);
 
 export default router;
