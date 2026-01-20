@@ -3,6 +3,7 @@ import { uploadErrors } from "../utils/errors.utils.js";
 
 export const uploadProfil = async (req, res) => {
   try {
+    
     // Vérification fichier
     if (!req.file) {
       throw Error("no file");
@@ -25,7 +26,7 @@ export const uploadProfil = async (req, res) => {
       req.body.userId,
       {
         $set: {
-          picture: `/uploads/profil/${req.body.filename}`,
+          picture: `/client/uploads/profil/${req.body.filename}`,
         },
       },
       { new: true }

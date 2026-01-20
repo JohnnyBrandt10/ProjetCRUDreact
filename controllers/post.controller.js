@@ -49,7 +49,7 @@ export const createPost = async (req, res) => {
       });
     }
 
-    picture = `/uploads/posts/${req.file.filename}`;
+    picture = `/client/uploads/posts/${req.file.filename}`;
   }
 
   // Création du post
