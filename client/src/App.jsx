@@ -1,19 +1,43 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Home from "./pages/Home";
-import Profile from "./pages/Profile";
-import Trending from "./pages/Trending";
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import Home from './pages/Home';
+import Profile from './pages/Profile';
+import Trending from './pages/Trending';
+import { UserContext } from './components/AppContext';
+import { useEffect, useState } from 'react';
+import axios from 'axios';
 
 function App() {
+  const [uid, setUid] = useState(null);
+
+  useEffect(() => {
+    const fetchToken = async () => {
+      await axios({
+        method: 'get',
+        url: `${import.meta.env.VITE_API_URL}jwtid`,
+        withCredentials: true
+      })
+        .then((res) => {
+          setUid(res.data);
+        })
+        .catch((err) => {
+          console.log('no token: ' + err);
+        });
+    };
+    fetchToken()
+  }, [uid]);
+
   return (
-     <Router>
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/profile" element={<Profile />} />
-        <Route path="/trending" element={<Trending />} />
-        <Route path="*" element={<Home />} />
-      </Routes>
-    </Router>
-  )
+    <UserContext.Provider value={uid}>
+      <Router>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/profile" element={<Profile />} />
+          <Route path="/trending" element={<Trending />} />
+          <Route path="*" element={<Home />} />
+        </Routes>
+      </Router>
+    </UserContext.Provider>
+  );
 }
 
-export default App
+export default App;

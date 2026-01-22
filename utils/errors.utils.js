@@ -28,21 +28,17 @@ export const signUpErrors = (err) => {
 export const signInErrors = (err) => {
   let errors = { email: "", password: "" };
 
-  if (err.message === "email incorrect") {
+  if (err.message.toLowerCase().includes("email")) {
     errors.email = "Email incorrect";
   }
 
-  if (err.message === "password incorrect") {
+  if (err.message.toLowerCase().includes("password")) {
     errors.password = "Mot de passe incorrect";
-  }
-
-  if (err.message === "missing fields") {
-    errors.email = "Email requis";
-    errors.password = "Mot de passe requis";
   }
 
   return errors;
 };
+
 
 //upload errors
 export const uploadErrors = (err) => {

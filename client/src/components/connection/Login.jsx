@@ -3,8 +3,8 @@ import SigninForm from './SigninForm';
 import SignupForm from './SignupForm';
 
 export default function Login(props) {
-  const [signinModal, setSigninModal] = useState(props.true);
-  const [signupModal, setSignupModal] = useState(props.false);
+  const [signinModal, setSigninModal] = useState(props.signin);
+  const [signupModal, setSignupModal] = useState(props.signup);
 
   const handleModals = (e) => {
     if (e.target.id === 'register') {
