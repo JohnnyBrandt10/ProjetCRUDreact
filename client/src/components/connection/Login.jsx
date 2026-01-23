@@ -6,6 +6,7 @@ export default function Login(props) {
   const [signinModal, setSigninModal] = useState(props.signin);
   const [signupModal, setSignupModal] = useState(props.signup);
 
+  //Button active function et forme
   const handleModals = (e) => {
     if (e.target.id === 'register') {
       setSigninModal(false);

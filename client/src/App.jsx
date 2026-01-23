@@ -5,6 +5,7 @@ import Trending from './pages/Trending';
 import { UserContext } from './components/AppContext';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
+import NavBar from './components/NavBar';
 
 function App() {
   const [uid, setUid] = useState(null);
@@ -23,12 +24,13 @@ function App() {
           console.log('no token: ' + err);
         });
     };
-    fetchToken()
+    fetchToken();
   }, [uid]);
 
   return (
     <UserContext.Provider value={uid}>
       <Router>
+        <NavBar />
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/profile" element={<Profile />} />

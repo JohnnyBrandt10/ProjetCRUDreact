@@ -5,10 +5,11 @@ export default function SigninForm() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
+  //Login function et forme
   const handleLogin = async (e) => {
     e.preventDefault();
 
-    axios({
+    await axios({
       method: 'post',
       url: `${import.meta.env.VITE_API_URL}api/user/login`,
       withCredentials: true,
@@ -40,11 +41,12 @@ export default function SigninForm() {
 
   return (
     <div>
-      <form onSubmit={handleLogin} id="signinForm">
+      <form onSubmit={handleLogin} id="sign-in-form">
         <label>Email</label>
         <br />
         <input
           type="email"
+          name='email'
           onChange={(e) => setEmail(e.target.value)}
           value={email}
         />
@@ -56,6 +58,7 @@ export default function SigninForm() {
         <br />
         <input
           type="password"
+          name='password'
           onChange={(e) => setPassword(e.target.value)}
           value={password}
         />
