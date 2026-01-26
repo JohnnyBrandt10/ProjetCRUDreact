@@ -1,6 +1,7 @@
 import React, { useContext } from 'react';
 import Login from '../components/connection/Login';
 import { UserContext } from '../components/AppContext';
+import UpdateProfile from '../components/Profile/UpdateProfile';
 
 export default function Profile() {
   const uid = useContext(UserContext);
@@ -8,7 +9,7 @@ export default function Profile() {
   return (
     <div className="profil-page">
       {uid ? (
-        <h1>Update page</h1>
+        <UpdateProfile/>
       ) : (
         <div className="log-container">
           <Login signin={true} signup={false} />

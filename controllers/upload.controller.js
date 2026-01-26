@@ -26,7 +26,7 @@ export const uploadProfil = async (req, res) => {
       req.body.userId,
       {
         $set: {
-          picture: `/client/uploads/profil/${req.body.filename}`,
+          picture: `./uploads/profil/${req.body.name}.jpg`,
         },
       },
       { new: true }

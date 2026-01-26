@@ -6,9 +6,13 @@ import { UserContext } from './components/AppContext';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import NavBar from './components/NavBar';
+import { useDispatch } from 'react-redux';
+import { getUser } from '../reducers/user.slice';
 
 function App() {
   const [uid, setUid] = useState(null);
+  const dispatch = useDispatch();
+  
 
   useEffect(() => {
     const fetchToken = async () => {
@@ -25,6 +29,7 @@ function App() {
         });
     };
     fetchToken();
+    if (uid) dispatch(getUser(uid))
   }, [uid]);
 
   return (

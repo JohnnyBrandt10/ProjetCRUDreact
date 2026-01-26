@@ -2,10 +2,12 @@ import React, { useContext } from 'react';
 import { NavLink } from 'react-router-dom';
 import { UserContext } from './AppContext';
 import Logout from './connection/Logout';
+import { useSelector } from 'react-redux';
 
 export default function NavBar() {
   // Bare navigation et forme
   const uid = useContext(UserContext);
+  const userData = useSelector(state => state.user.user)
 
   return (
     <nav>
@@ -23,7 +25,7 @@ export default function NavBar() {
             <li></li>
             <li className="welcome">
               <NavLink to="/profile">
-                <h5>Bienvenue 'Nom'</h5>
+                <h5>Bienvenue {userData?.pseudo}</h5>
               </NavLink>
             </li>
             <Logout/>
