@@ -30,7 +30,7 @@ function App() {
     };
     fetchToken();
     if (uid) dispatch(getUser(uid))
-  }, [uid]);
+  }, [uid, dispatch]);
 
   return (
     <UserContext.Provider value={uid}>
