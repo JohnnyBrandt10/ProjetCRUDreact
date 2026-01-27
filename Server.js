@@ -10,6 +10,9 @@ import { checkUser, requireAuth } from './middleware/auth.middleware.js';
 
 const app = express();
 
+app.use("/uploads", express.static("client/uploads"));
+
+
 app.use(
   cors({
     origin: process.env.CLIENT_URL,

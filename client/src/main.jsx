@@ -4,6 +4,9 @@ import { Provider } from 'react-redux'
 import { store } from './Store.jsx'
 import './styles/index.scss'
 import App from './App.jsx'
+import { getUsers } from '../reducers/user.slice.jsx'
+
+store.dispatch(getUsers())
 
 createRoot(document.getElementById('root')).render(
   <Provider store={store}>

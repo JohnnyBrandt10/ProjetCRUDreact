@@ -20,7 +20,7 @@ export default function UploadImg() {
     <form action="" onSubmit={handlePicture} className='upload-pic'>
         <label htmlFor="file">Changer l’image</label>
         <input type="file" name='file' id='file' accept='.jpg, .jpeg, .png' onChange={(e) => setFile(e.target.files[0])} /><br/>
-        <input type="submit" value="Envoyer" />
+        <input type="submit" value="Modifier" />
     </form>
   )
 }
