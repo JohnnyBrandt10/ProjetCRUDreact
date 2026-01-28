@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import UploadImg from './UploadImg';
 import { updateBio } from '../../../reducers/user.slice';
 import { dateParser } from '../FormatDate';
+import FolloeHandler from './FolloeHandler';
 
 export default function UpdateProfile() {
   const [bio, setBio] = useState('');
@@ -18,7 +19,7 @@ export default function UpdateProfile() {
     e.preventDefault();
     dispatch(updateBio({ userId: userData._id, bio }));
     setUpdateForm(false);
-  }
+  };
 
   return (
     <div className="profil-container">
@@ -52,9 +53,7 @@ export default function UpdateProfile() {
                   value={bio}
                   onChange={(e) => setBio(e.target.value)}
                 />
-                <button onClick={handleUpdateBio}>
-                  Valider
-                </button>
+                <button onClick={handleUpdateBio}>Valider</button>
                 <button onClick={() => setUpdateForm(!updateForm)}>
                   Annuler
                 </button>
@@ -62,15 +61,23 @@ export default function UpdateProfile() {
             )}
           </div>
           <h4>Membre depuis le: {dateParser(userData?.createdAt)}</h4>
-          <h5 onClick={() => setFollowingPopup(true)}>Abonnements : {userData?.following ? userData?.following.length : 0} </h5>
-          <h5 onClick={() => setFollowersPopup(true)}>Abonnes : {userData?.followers ? userData?.followers.length : 0} </h5>
+          <h5 onClick={() => setFollowingPopup(true)}>
+            Abonnements :{' '}
+            {userData?.following ? userData?.following.length : 0}{' '}
+          </h5>
+          <h5 onClick={() => setFollowersPopup(true)}>
+            Abonnes :{' '}
+            {userData?.followers ? userData?.followers.length : 0}{' '}
+          </h5>
         </div>
       </div>
       {followingPopup && (
         <div className="popup-profil-container">
           <div className="modal">
             <h3>Abonnements</h3>
-            <span className="cross" onClick={() => setFollowingPopup(false)}>&#10005;</span>
+            <span className="cross" onClick={() => setFollowingPopup(false)}>
+              &#10005;
+            </span>
             <ul>
               {usersData.map((user) => {
                 for (let i = 0; i < userData.following.length; i++) {
@@ -79,11 +86,14 @@ export default function UpdateProfile() {
                       <li key={user._id}>
                         <img src={user.picture} alt="user-pic" />
                         <h4>{user.pseudo}</h4>
-                        <h1>Follow</h1>
+                        <div className="follow-handler">
+                          <FolloeHandler idToFollow={user._id} />
+                        </div>
                       </li>
                     );
                   }
-                }})}
+                }
+              })}
             </ul>
           </div>
         </div>
@@ -92,7 +102,9 @@ export default function UpdateProfile() {
         <div className="popup-profil-container">
           <div className="modal">
             <h3>Abonnes</h3>
-            <span className="cross" onClick={() => setFollowersPopup(false)}>&#10005;</span>
+            <span className="cross" onClick={() => setFollowersPopup(false)}>
+              &#10005;
+            </span>
             <ul>
               {usersData.map((user) => {
                 for (let i = 0; i < userData.followers.length; i++) {
@@ -101,11 +113,14 @@ export default function UpdateProfile() {
                       <li key={user._id}>
                         <img src={user.picture} alt="user-pic" />
                         <h4>{user.pseudo}</h4>
-                        <h1>Follow</h1>
+                        <div className="follow-handler">
+                          <FolloeHandler idToFollow={user._id} />
+                        </div>
                       </li>
                     );
                   }
-                }})}
+                }
+              })}
             </ul>
           </div>
         </div>

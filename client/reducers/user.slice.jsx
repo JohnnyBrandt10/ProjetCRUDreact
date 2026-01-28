@@ -52,6 +52,38 @@ export const getUsers = createAsyncThunk('user/getUsers', async () => {
   return res.data;
 });
 
+export const followUser = createAsyncThunk(
+  'user/followUser',
+  async ({ followerId, idToFollow }, thunkAPI) => {
+    try {
+      const res = await axios.patch(
+        `${import.meta.env.VITE_API_URL}api/user/follow/${followerId}`,
+        { idToFollow }
+      );
+
+      return res.data;
+    } catch (err) {
+      return thunkAPI.rejectWithValue(err.message);
+    }
+  }
+);
+
+export const unfollowUser = createAsyncThunk(
+  'user/unfollowUser',
+  async ({ followerId, idToUnFollow }, thunkAPI) => {
+    try {
+      const res = await axios.patch(
+        `${import.meta.env.VITE_API_URL}api/user/unfollow/${followerId}`,
+        { idToUnFollow }
+      );
+
+      return res.data;
+    } catch (err) {
+      return thunkAPI.rejectWithValue(err.message);
+    }
+  }
+);
+
 // Slice/Reducers
 const userSlice = createSlice({
   name: 'user',
@@ -113,6 +145,21 @@ const userSlice = createSlice({
         state.loading = false;
         state.errors = action.payload;
       });
+
+    builder
+      // FOLLOWUSER
+      .addCase(followUser.fulfilled, (state, action) => {
+        state.loading = false;
+        state.user = action.payload;
+      });
+
+    builder
+      // UNFOLLOWUSER
+      .addCase(unfollowUser.fulfilled, (state, action) => {
+        state.loading = false;
+        state.user = action.payload;
+      });
+
   }
 });
 
