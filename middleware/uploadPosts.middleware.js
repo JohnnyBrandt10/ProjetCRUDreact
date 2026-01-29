@@ -6,13 +6,9 @@ const storage = multer.diskStorage({
     cb(null, "client/uploads/posts");
   },
   filename: (req, file, cb) => {
-    cb(
-      null,
-      Date.now() + path.extname(file.originalname)
-    );
-  }
+    cb(null, Date.now() + path.extname(file.originalname));
+  },
 });
 
-const uploadPost = multer({ storage });
-
-export default uploadPost;
+const upload = multer({ storage });
+export default upload;

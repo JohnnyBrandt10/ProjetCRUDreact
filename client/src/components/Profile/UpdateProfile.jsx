@@ -87,12 +87,16 @@ export default function UpdateProfile() {
                         <img src={user.picture} alt="user-pic" />
                         <h4>{user.pseudo}</h4>
                         <div className="follow-handler">
-                          <FolloeHandler idToFollow={user._id} />
+                          <FolloeHandler
+                            idToFollow={user._id}
+                            type={'suggestion'}
+                          />
                         </div>
                       </li>
                     );
                   }
                 }
+                return null;
               })}
             </ul>
           </div>
@@ -114,12 +118,16 @@ export default function UpdateProfile() {
                         <img src={user.picture} alt="user-pic" />
                         <h4>{user.pseudo}</h4>
                         <div className="follow-handler">
-                          <FolloeHandler idToFollow={user._id} />
+                          <FolloeHandler
+                            idToFollow={user._id}
+                            type={'suggestion'}
+                          />
                         </div>
                       </li>
                     );
                   }
                 }
+                return null;
               })}
             </ul>
           </div>
