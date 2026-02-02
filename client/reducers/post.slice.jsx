@@ -34,6 +34,26 @@ export const unlikePost = createAsyncThunk(
   }
 );
 
+// UPDATEPOST
+export const updatePost = createAsyncThunk(
+  'post/updatePost',
+  async ({ postId, message }) => {
+    await axios.put(`${import.meta.env.VITE_API_URL}api/post/${postId}`, {
+      id: message
+    });
+    return { postId, message };
+  }
+);
+
+// DELETEPOST
+export const deletePost = createAsyncThunk(
+  'post/deletePost',
+  async ({ postId }) => {
+    await axios.delete(`${import.meta.env.VITE_API_URL}api/post/${postId}`);
+    return { postId };
+  }
+);
+
 // SLICE/Reducer
 const postSlice = createSlice({
   name: 'post',
@@ -61,7 +81,10 @@ const postSlice = createSlice({
       .addCase(likePost.fulfilled, (state, action) => {
         state.posts = state.posts.map((post) =>
           post._id === action.payload.postId
-            ? { ...post, likers: [action.payload.userId, ...post.likers] }
+            ? {
+                ...post,
+                likers: [action.payload.userId, ...post.likers]
+              }
             : post
         );
       })
@@ -75,6 +98,25 @@ const postSlice = createSlice({
                 likers: post.likers.filter((id) => id !== action.payload.userId)
               }
             : post
+        );
+      })
+
+      // UPDATEPOST
+      .addCase(updatePost.fulfilled, (state, action) => {
+        state.posts = state.posts.map((post) =>
+          post._id === action.payload.postId
+            ? {
+                ...post,
+                message: action.payload.message
+              }
+            : post
+        );
+      })
+
+      // DELETEPOST
+      .addCase(deletePost.fulfilled, (state, action) => {
+        state.posts = state.posts.filter(
+          (post) => post._id !== action.payload.postId
         );
       });
   }

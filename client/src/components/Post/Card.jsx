@@ -1,12 +1,26 @@
-import React from 'react';
-import { useSelector } from 'react-redux';
+import React, { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { dateParser, isEmpty } from '../FormatDate';
 import FolloeHandler from '../Profile/FolloeHandler';
 import Like from './Like';
+import { updatePost } from '../../../reducers/post.slice';
+import DeleteCard from './DeleteCard';
+import CommentCard from './CommentCard';
 
 export default function Card({ post }) {
   const usersData = useSelector((state) => state.user.users);
-  //const userData = useSelector((state) => state.user.user);
+  const [isUpdated, setIsUpdate] = useState(false);
+  const [textUpdated, setTextUpdated] = useState(null);
+  const [showComments, setShowComments] = useState(false);
+  const userData = useSelector((state) => state.user.user);
+  const dispatch = useDispatch();
+
+  const updateItem = async () => {
+    if (textUpdated) {
+      dispatch(updatePost({ postId: post._id, message: textUpdated }));
+    }
+    setIsUpdate(false);
+  };
 
   const isLoading = isEmpty(usersData[0]);
 
@@ -23,7 +37,7 @@ export default function Card({ post }) {
                 usersData
                   .map((user) => {
                     if (user._id === post.posterID) return user.picture;
-                    else return null
+                    else return null;
                   })
                   .join('')
               }
@@ -37,16 +51,29 @@ export default function Card({ post }) {
                   {!isEmpty(usersData[0]) &&
                     usersData.map((user) => {
                       if (user._id === post.posterID) return user.pseudo;
-                      else return null
+                      else return null;
                     })}
                 </h3>
-                {post.posterID !== usersData._id && (
+                {post.posterID !== userData?._id && (
                   <FolloeHandler idToFollow={post.posterID} type={'card'} />
                 )}
               </div>
               <span>{dateParser(post.createdAt)}</span>
             </div>
-            <p>{post.message}</p>
+            {isUpdated === false && <p>{post.message}</p>}
+            {isUpdated === true && (
+              <div className="update-post">
+                <textarea
+                  defaultValue={post.message}
+                  onChange={(e) => setTextUpdated(e.target.value)}
+                />
+                <div className="button-container">
+                  <button className="btn" onClick={updateItem}>
+                    Valider modification
+                  </button>
+                </div>
+              </div>
+            )}
             {post.picture && (
               <img src={post.picture} alt="post-pic" className="card-pic" />
             )}
@@ -61,14 +88,27 @@ export default function Card({ post }) {
                 title={post._id}
               ></iframe>
             )}
-            <div className="card-footer">
-                <div className="comment-icon">
-                    <img src="./img/icons/message1.svg" alt="comment" />
-                    <span>{post.comments.length}</span>
+            {userData?._id === post.posterID && (
+              <div className="button-container">
+                <div onClick={() => setIsUpdate(!isUpdated)}>
+                  <img src="./img/icons/edit.svg" alt="edit" />
                 </div>
-                <Like post={post}/>
-                <img src="./img/icons/share.svg" alt="share" />
+                <DeleteCard id={post._id} />
+              </div>
+            )}
+            <div className="card-footer">
+              <div className="comment-icon">
+                <img
+                  onClick={() => setShowComments(!showComments)}
+                  src="./img/icons/message1.svg"
+                  alt="comment"
+                />
+                <span>{post.comments.length}</span>
+              </div>
+              <Like post={post} />
+              <img src="./img/icons/share.svg" alt="share" />
             </div>
+            {showComments && <CommentCard post={post} />}
           </div>
         </>
       )}

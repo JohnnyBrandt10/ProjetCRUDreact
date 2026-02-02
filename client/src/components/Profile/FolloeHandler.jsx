@@ -10,7 +10,7 @@ export default function FollowHandler({ idToFollow, type }) {
   const handleFollow = () => {
     dispatch(
       followUser({
-        followerId: userData._id,
+        followerId: userData?._id,
         idToFollow
       })
     );
@@ -19,14 +19,14 @@ export default function FollowHandler({ idToFollow, type }) {
   const handleUnFollow = () => {
     dispatch(
       unfollowUser({
-        followerId: userData._id,
+        followerId: userData?._id,
         idToUnFollow: idToFollow
       })
     );
   };
 
   const isFollowed =
-    !isEmpty(userData?.following) && userData.following.includes(idToFollow);
+    !isEmpty(userData?.following) && userData?.following.includes(idToFollow);
 
   return (
     <div>
