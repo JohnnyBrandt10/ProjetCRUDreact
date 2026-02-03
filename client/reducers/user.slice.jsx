@@ -84,6 +84,10 @@ export const unfollowUser = createAsyncThunk(
   }
 );
 
+
+
+//==================================SLICE======================================//
+
 // Slice/Reducers
 const userSlice = createSlice({
   name: 'user',
