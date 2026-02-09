@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { UserContext } from '../AppContext';
 import { useDispatch } from 'react-redux';
-import { editComment } from '../../../reducers/post.slice';
+import { deleteComment, editComment } from '../../../reducers/post.slice';
 
 export default function EditDeleteComment({ comment, postId }) {
   const [isAuthors, setIsAuthors] = useState(false);
@@ -14,10 +14,14 @@ export default function EditDeleteComment({ comment, postId }) {
   const handleEdit = (e) => {
     e.preventDefault();
     if (text) {
-        dispatch(editComment({ postId: postId, commentId: comment._id, text }));
-        setText('');
-        setIsEditing(false);
+      dispatch(editComment({ postId: postId, commentId: comment._id, text }));
+      setText('');
+      setIsEditing(false);
     }
+  };
+
+  const handleDelete = () => {
+    dispatch(deleteComment({ postId: postId, commentId: comment._id }));
   };
 
   useEffect(() => {
@@ -39,7 +43,7 @@ export default function EditDeleteComment({ comment, postId }) {
       {isAuthors && isEditing && (
         <form action="" onSubmit={handleEdit} className="edit-comment-form">
           <label htmlFor="text" onClick={() => setIsEditing(!isEditing)}>
-            Modifier
+            Annuler
           </label>
           <br />
           <input
@@ -47,8 +51,20 @@ export default function EditDeleteComment({ comment, postId }) {
             defaultValue={comment.text}
             onChange={(e) => setText(e.target.value)}
             name="text"
-          /><br/>
-          <input type="submit" value="Valider" />
+          />
+          <br />
+          <div className="btn">
+            <span
+              onClick={() => {
+                if (window.confirm('Voulez vous supprimez ce commentaire ?')) {
+                  handleDelete();
+                }
+              }}
+            >
+              <img src="./img/icons/trash.svg" alt="delete" />
+            </span>
+            <input type="submit" value="Valider" />
+          </div>
         </form>
       )}
     </div>

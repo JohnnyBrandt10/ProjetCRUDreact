@@ -78,6 +78,18 @@ export const editComment = createAsyncThunk(
   }
 );
 
+// DELETE-COMMENT
+export const deleteComment = createAsyncThunk(
+  'post/deleteComment',
+  async ({ postId, commentId }) => {
+    await axios.patch(
+      `${import.meta.env.VITE_API_URL}api/post/delete-comment-post/${postId}`,
+      { commentId }
+    );
+    return { postId, commentId };
+  }
+);
+
 // =======================================SLICE============================================= //
 
 // SLICE/Reducer
@@ -161,9 +173,23 @@ const postSlice = createSlice({
             return {
               ...post,
               comments: post.comments.map((comment) =>
-                comment._id === commentId
-                  ? { ...comment, text } 
-                  : comment
+                comment._id === commentId ? { ...comment, text } : comment
+              )
+            };
+          }
+          return post;
+        });
+      })
+
+      // DELETE-COMMENT
+      .addCase(deleteComment.fulfilled, (state, action) => {
+        const { postId, commentId } = action.payload;
+        state.posts = state.posts.map((post) => {
+          if (post._id === postId) {
+            return {
+              ...post,
+              comments: post.comments.filter(
+                (comment) => comment._id !== commentId
               )
             };
           }
