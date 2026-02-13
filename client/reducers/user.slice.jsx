@@ -26,7 +26,7 @@ export const uploadPicture = createAsyncThunk(
 
       return userRes.data.picture;
     } catch (err) {
-      return thunkAPI.rejectWithValue(err.message);
+      return thunkAPI.rejectWithValue(err.response?.data?.errors || err.response?.data || "Erreur serveur");
     }
   }
 );
@@ -117,9 +117,8 @@ const userSlice = createSlice({
         state.loading = false;
         state.user.picture = action.payload;
       })
-      .addCase(uploadPicture.rejected, (state, action) => {
+      .addCase(uploadPicture.rejected, (state) => {
         state.loading = false;
-        state.errors = action.payload;
       });
 
     builder

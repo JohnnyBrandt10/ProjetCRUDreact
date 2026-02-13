@@ -90,6 +90,27 @@ export const deleteComment = createAsyncThunk(
   }
 );
 
+// ADD-POST
+export const addPost = createAsyncThunk(
+  'post/addPost',
+  async (data, { rejectWithValue }) => {
+    try {
+      const res = await axios.post(
+        `${import.meta.env.VITE_API_URL}api/post/`,
+        data
+      );
+
+      if (res.data.errors) {
+        return rejectWithValue(res.data.errors);
+      }
+
+      return res.data;
+    } catch (err) {
+      return rejectWithValue(err.response?.data || 'Erreur serveur');
+    }
+  }
+);
+
 // =======================================SLICE============================================= //
 
 // SLICE/Reducer
@@ -195,6 +216,12 @@ const postSlice = createSlice({
           }
           return post;
         });
+      })
+
+      // ADD-POST
+      .addCase(addPost.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.posts.unshift(action.payload);
       });
   }
 });

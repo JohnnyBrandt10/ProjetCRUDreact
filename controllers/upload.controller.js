@@ -10,11 +10,15 @@ export const uploadProfil = async (req, res) => {
       req.file.mimetype !== "image/png" &&
       req.file.mimetype !== "image/jpeg"
     ) {
-      throw Error("invalid file");
+      return res.status(400).json({
+        message: "Format image non autorisé"
+      });
     }
 
     if (req.file.size > 500000) {
-      throw Error("max size");
+      return res.status(400).json({
+        message: "Image trop volumineuse (max 500Ko)"
+      });
     }
 
     const user = await UserModel.findByIdAndUpdate(

@@ -1,8 +1,9 @@
 /* eslint-disable react-hooks/purity */
-import React, { useState } from 'react';
-import { useSelector } from 'react-redux';
+import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { isEmpty, timestamp } from '../FormatDate';
 import { NavLink } from 'react-router-dom';
+import { addPost, getPosts } from '../../../reducers/post.slice';
 
 export default function NewPostForm() {
   const userData = useSelector((state) => state.user.user);
@@ -10,9 +11,13 @@ export default function NewPostForm() {
   const [ispicture, setIsPicture] = useState(null);
   const [video, setIsVideo] = useState('');
   const [file, setFile] = useState();
+  const dispatch = useDispatch();
+  const error = useSelector((state) => state.error.postError);
 
   const handlePicture = (e) => {
-    e.preventDefault();
+    setIsPicture(URL.createObjectURL(e.target.files[0]));
+    setFile(e.target.files[0]);
+    setIsVideo('');
   };
 
   const cancelPost = () => {
@@ -22,7 +27,39 @@ export default function NewPostForm() {
     setFile('');
   };
 
-  const handlePost = () => {};
+  const handlePost = async () => {
+    if (message || ispicture || video) {
+      const data = new FormData();
+      data.append('posterID', userData?._id);
+      data.append('message', message);
+      if (file) {
+        data.append('file', file);
+      }
+      data.append('video', video);
+
+      await dispatch(addPost(data));
+      dispatch(getPosts());
+      cancelPost();
+    } else {
+      alert('Veuillez entrer un message');
+    }
+  };
+
+  useEffect(() => {
+    let findLink = message.split(' ');
+    for (let i = 0; i < findLink.length; i++) {
+      if (
+        findLink[i].includes('https://www.yout') ||
+        findLink[i].includes('https://yout')
+      ) {
+        let embed = findLink[i].replace('watch?v=', 'embed/');
+        setIsVideo(embed.split('&')[0]);
+        findLink.splice(i, 1);
+        setMessage(findLink.join(' '));
+        setIsPicture('');
+      }
+    }
+  }, [message, video]);
 
   return (
     <div className="post-container">
@@ -110,6 +147,7 @@ export default function NewPostForm() {
                   </button>
                 )}
               </div>
+              {!isEmpty(error.message) && <p>{error.message}</p>}
               <div className="btn-send">
                 {message || ispicture || video ? (
                   <button className="cancel" onClick={() => cancelPost()}>
